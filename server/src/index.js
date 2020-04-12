@@ -33,8 +33,9 @@ io.on("connection", socket => {
   });
 
   socket.on("start game", () => {
-    //let time = 60 * 3;
-    let time = 5;
+    let time = 60 * 3;
+    io.emit("game started");
+    io.emit("time", time);
     const interval = setInterval(() => {
       time -= 1;
       io.emit("time", time);

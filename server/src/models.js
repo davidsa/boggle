@@ -1,4 +1,4 @@
-const CHARS = "ABCDEFGHIJLMNOPQRSTUVYZ";
+const CHARS = "AAAAABCDEEEEEFGHIIIIIJLMNOOOOOPQRSTUUUUUVYZ";
 
 function randomLetter() {
   const i = Math.floor(Math.random() * CHARS.length);

@@ -88,6 +88,10 @@ export default ({ board, words, addWord, removeWord, socket, history }) => {
 
   useEffect(() => {
     if (socket) {
+      socket.on("game started", () => {
+        setGameStarted(true);
+      });
+
       socket.on("time", time => {
         setSeconds(time % 60);
         setMinutes(Math.floor(time / 60));
@@ -126,7 +130,6 @@ export default ({ board, words, addWord, removeWord, socket, history }) => {
   const handleStart = useCallback(() => {
     if (socket) {
       socket.emit("start game");
-      setGameStarted(true);
     }
   }, [socket]);
 
