@@ -21,6 +21,7 @@ const Container = styled("div")`
 `;
 
 const Header = styled("div")`
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
