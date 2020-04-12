@@ -33,7 +33,8 @@ io.on("connection", socket => {
   });
 
   socket.on("start game", () => {
-    let time = 60 * 3;
+    //let time = 60 * 3;
+    let time = 5;
     io.emit("game started");
     io.emit("time", time);
     const interval = setInterval(() => {

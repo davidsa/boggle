@@ -68,7 +68,13 @@ export default function () {
         path="/score"
         exact
         render={props => (
-          <Score {...props} words={words} socket={socket} reset={resetWords} />
+          <Score
+            {...props}
+            words={words}
+            socket={socket}
+            reset={resetWords}
+            board={board}
+          />
         )}
       />
     </Switch>

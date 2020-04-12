@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { List, Button } from "antd";
+import Board from "./Board";
 
 const { Item } = List;
 
@@ -14,6 +15,7 @@ const WordRow = styled("div")`
 `;
 
 const Container = styled("div")`
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -27,11 +29,29 @@ const Header = styled("div")`
 const ScoreList = styled(List)`
   flex: 1;
   overflow: scroll;
+  max-width: 500px;
 `;
 
-export default ({ socket, words: w, reset }) => {
+const Main = styled("div")`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+function sortAlpha({ value: a }, { value: b }) {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+}
+
+export default ({ socket, words: w, reset, board }) => {
   const [words, setWords] = useState(
-    w.map(word => ({ value: word, strike: false }))
+    w.map(word => ({ value: word, strike: false })).sort(sortAlpha)
   );
 
   const handlePlayAgain = useCallback(() => {
@@ -63,22 +83,25 @@ export default ({ socket, words: w, reset }) => {
         <h1>Score: {score}</h1>
         <Button onClick={handlePlayAgain}>Play Again</Button>
       </Header>
-      <ScoreList
-        bordered
-        size="small"
-        header={<h2>Words</h2>}
-        dataSource={words}
-        renderItem={({ value, strike }, index) => (
-          <Item>
-            <WordRow>
-              <span style={{ textDecoration: strike ? "line-through" : "" }}>
-                {value}
-              </span>
-              <CloseCircleFilled onClick={onStrike(index)} />
-            </WordRow>
-          </Item>
-        )}
-      />
+      <Main>
+        <Board board={board} />
+        <ScoreList
+          bordered
+          size="small"
+          header={<h2>Words</h2>}
+          dataSource={words}
+          renderItem={({ value, strike }, index) => (
+            <Item>
+              <WordRow>
+                <span style={{ textDecoration: strike ? "line-through" : "" }}>
+                  {value}
+                </span>
+                <CloseCircleFilled onClick={onStrike(index)} />
+              </WordRow>
+            </Item>
+          )}
+        />
+      </Main>
     </Container>
   );
 };
