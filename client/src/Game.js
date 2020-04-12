@@ -68,7 +68,20 @@ const BoardContainer = styled("div")`
 
 const ContentContainer = styled("div")``;
 
-export default ({ board, words, addWord, removeWord, socket, history }) => {
+const TimeContainer = styled("div")`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export default ({
+  board,
+  words,
+  addWord,
+  removeWord,
+  socket,
+  history,
+  onRotate
+}) => {
   const [input, setInput] = useState("");
   const [seconds, setSeconds] = useState(null);
   const [minutes, setMinutes] = useState(null);
@@ -126,9 +139,12 @@ export default ({ board, words, addWord, removeWord, socket, history }) => {
     <Container>
       <BoardContainer>
         {gameStarted && seconds !== null && (
-          <h1>
-            Time {minutes}:{seconds}
-          </h1>
+          <TimeContainer>
+            <h1>
+              Time {minutes}:{seconds}
+            </h1>
+            <Button onClick={onRotate}>Rotate</Button>
+          </TimeContainer>
         )}
         <Board board={board} />
         {gameStarted && (

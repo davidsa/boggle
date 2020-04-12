@@ -6,6 +6,17 @@ import Home from "./Home";
 import Game from "./Game";
 import Score from "./Score";
 
+function rotate(arr) {
+  const n = arr.length;
+  const newGrid = arr.map(() => []);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      newGrid[i][j] = arr[n - j - 1][i];
+    }
+  }
+  return newGrid;
+}
+
 export default function () {
   const [socket, setSocket] = useState();
   const [board, setBoard] = useState();
@@ -39,6 +50,11 @@ export default function () {
     addWord(words => words.filter(w => w !== word));
   });
 
+  const handleRotate = useCallback(() => {
+    const newBoard = rotate(board);
+    setBoard(newBoard);
+  });
+
   return (
     <Switch>
       <Route
@@ -57,6 +73,7 @@ export default function () {
             words={words}
             addWord={handleAddWord}
             removeWord={handleRemoveWord}
+            onRotate={handleRotate}
           />
         )}
       />
