@@ -30,6 +30,7 @@ const ScoreList = styled(List)`
   flex: 1;
   overflow: scroll;
   max-width: 500px;
+  max-height: 500px;
 `;
 
 const Main = styled("div")`
@@ -49,14 +50,13 @@ function sortAlpha({ value: a }, { value: b }) {
   return 0;
 }
 
-export default ({ socket, words: w, reset, board }) => {
+export default ({ socket, words: w, board }) => {
   const [words, setWords] = useState(
     w.map(word => ({ value: word, strike: false })).sort(sortAlpha)
   );
 
   const handlePlayAgain = useCallback(() => {
     if (socket) {
-      reset();
       socket.emit("prepare game");
     }
   }, [socket]);

@@ -2,11 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const Board = styled("div")`
-  width: 300px;
-  height: 300px;
   display: grid;
-  grid-template: repeat(5, auto) / repeat(5, auto);
-  margin-bottom: 30px;
+  grid-template: repeat(5, 70px) / repeat(5, 70px);
   border-top: 1px solid black;
   border-left: 1px solid black;
   & > * {

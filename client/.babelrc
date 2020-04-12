@@ -1,4 +1,10 @@
 {
   "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/plugin-transform-react-jsx"]
+  "plugins": [
+    "@babel/plugin-transform-react-jsx",
+    [
+      "import",
+      { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }
+    ]
+  ]
 }

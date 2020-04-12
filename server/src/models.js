@@ -1,4 +1,4 @@
-const CHARS = "AAAAABCDEEEEEFGHIIIIIJLMNOOOOOPQRSTUUUUUVYZ";
+const CHARS = "AAABCDEEEFGHIIIJLMNOOOPQRSTUUUVYZ";
 
 function randomLetter() {
   const i = Math.floor(Math.random() * CHARS.length);
@@ -12,7 +12,8 @@ function generateBoard() {
       if (j === 0) {
         board[i] = [];
       }
-      board[i][j] = randomLetter();
+      const letter = randomLetter();
+      board[i][j] = letter === "Q" ? "Qu" : letter;
     }
   }
   return board;

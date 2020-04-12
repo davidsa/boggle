@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { List, Button } from "antd";
+import { List, Button, Input } from "antd";
 import styled from "styled-components";
 import { CloseCircleFilled } from "@ant-design/icons";
 import Board from "./Board";
@@ -17,29 +17,29 @@ const Row = styled("div")`
 `;
 
 const Container = styled("div")`
-  display: grid;
-  place-content: center;
+  display: flex;
   height: 100vh;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Close = styled("button")``;
 
 const Form = styled("form")`
   height: 50px;
-  margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 `;
 
-const Input = styled("input")`
+const WordInput = styled(Input)`
+  flex: 1;
   font-size: 1.5rem;
-  &:focus {
-    outline: 0;
-  }
 `;
 
 const Add = styled(Button)`
   height: 100%;
+  width: 70px;
 `;
 
 const ControlsContainer = styled("div")`
@@ -49,7 +49,8 @@ const ControlsContainer = styled("div")`
 
 const WordsList = styled(List)`
   overflow: scroll;
-  max-height: "200px";
+  width: 40vw;
+  max-height: 450px;
 `;
 
 const WordRow = styled("div")`
@@ -59,6 +60,13 @@ const WordRow = styled("div")`
   align-items: center;
   font-size: 1.5rem;
 `;
+
+const BoardContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContentContainer = styled("div")``;
 
 export default ({ board, words, addWord, removeWord, socket, history }) => {
   const [input, setInput] = useState("");
@@ -116,41 +124,43 @@ export default ({ board, words, addWord, removeWord, socket, history }) => {
 
   return (
     <Container>
-      {seconds !== null && (
-        <h1>
-          Time {minutes}:{seconds}
-        </h1>
-      )}
-      <Board board={board} />
-      {!gameStarted ? (
-        <ControlsContainer>
-          <Button onClick={handleShuffle}>Shuffle Board</Button>
-          <Button onClick={handleStart}>Start Game</Button>
-        </ControlsContainer>
-      ) : (
-        <>
+      <BoardContainer>
+        {gameStarted && seconds !== null && (
+          <h1>
+            Time {minutes}:{seconds}
+          </h1>
+        )}
+        <Board board={board} />
+        {gameStarted && (
           <Form onSubmit={handleSubmit}>
-            <Input type="text" value={input} onChange={handleInput} />
-            <Add type="submit">Add</Add>
+            <WordInput type="text" value={input} onChange={handleInput} />
+            <Add htmlType="submit">Add</Add>
           </Form>
-          {words && words.length > 0 && (
-            <WordsList
-              bordered
-              size="small"
-              header={<h2>Words</h2>}
-              dataSource={words}
-              renderItem={word => (
-                <Item>
-                  <WordRow>
-                    <span>{word}</span>
-                    <CloseCircleFilled onClick={handleRemove(word)} />
-                  </WordRow>
-                </Item>
-              )}
-            />
-          )}
-        </>
-      )}
+        )}
+      </BoardContainer>
+      <ContentContainer>
+        {!gameStarted ? (
+          <ControlsContainer>
+            <Button onClick={handleShuffle}>Shuffle Board</Button>
+            <Button onClick={handleStart}>Start Game</Button>
+          </ControlsContainer>
+        ) : (
+          <WordsList
+            bordered
+            size="small"
+            header={<h2>Words</h2>}
+            dataSource={words}
+            renderItem={word => (
+              <Item>
+                <WordRow>
+                  <span>{word}</span>
+                  <CloseCircleFilled onClick={handleRemove(word)} />
+                </WordRow>
+              </Item>
+            )}
+          />
+        )}
+      </ContentContainer>
     </Container>
   );
 };

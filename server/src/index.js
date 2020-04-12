@@ -1,14 +1,24 @@
+require("dotenv").config();
 const app = require("express")();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const { generateBoard } = require("./models");
 
+let connected = [];
+let interval;
+let scores = [];
+const weakMap = new WeakMap();
+
+console.log("Time > ", process.env.TIME);
+
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
-let connected = [];
-const weakMap = new WeakMap();
+app.get("/clear", (req, res) => {
+  clearInterval(interval);
+  res.send("Done");
+});
 
 io.on("connection", socket => {
   console.log("someone connected");
@@ -33,11 +43,11 @@ io.on("connection", socket => {
   });
 
   socket.on("start game", () => {
-    //let time = 60 * 3;
-    let time = 5;
+    clearInterval(interval);
+    let time = parseInt(process.env.TIME);
     io.emit("game started");
     io.emit("time", time);
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       time -= 1;
       io.emit("time", time);
       if (time === 0) {
@@ -45,6 +55,13 @@ io.on("connection", socket => {
         io.emit("end game");
       }
     }, 1000);
+  });
+
+  socket.on("score", words => {
+    console.log(words);
+    const name = weakMap.get(socket);
+    scores.push({ name, words });
+    console.log(scores);
   });
 
   socket.on("disconnect", () => {

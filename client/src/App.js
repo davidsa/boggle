@@ -13,20 +13,20 @@ export default function () {
   const history = useHistory();
 
   useEffect(() => {
-    const ioSocket = io("http://localhost:3000");
+    const socket = io(SOCKET_URL);
 
-    ioSocket.on("prepare game", board => {
+    socket.on("prepare game", board => {
       history.push("/game");
+      addWord([]);
       setBoard(board);
     });
 
-    ioSocket.on("board generated", board => {
-      console.log(board);
+    socket.on("board generated", board => {
       setBoard(board);
     });
 
-    setSocket(ioSocket);
-    return () => ioSocket.disconnect();
+    setSocket(socket);
+    return () => socket.disconnect();
   }, []);
 
   const handleAddWord = useCallback(word => {
@@ -37,10 +37,6 @@ export default function () {
 
   const handleRemoveWord = useCallback(word => {
     addWord(words => words.filter(w => w !== word));
-  });
-
-  const resetWords = useCallback(() => {
-    addWord([]);
   });
 
   return (
@@ -68,13 +64,7 @@ export default function () {
         path="/score"
         exact
         render={props => (
-          <Score
-            {...props}
-            words={words}
-            socket={socket}
-            reset={resetWords}
-            board={board}
-          />
+          <Score {...props} words={words} socket={socket} board={board} />
         )}
       />
     </Switch>
